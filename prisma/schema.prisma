@@ -27,12 +27,12 @@ model User{
 model Manga{
   id Int @id @default(autoincrement())
   title String @db.VarChar(100)
-  author String? @db.VarChar(100)
-  status String? @db.VarChar(20)
-  release_date DateTime
+  author String @db.VarChar(100)
+  status String @db.VarChar(20)
+  release_date DateTime @db.Date
   username String @db.VarChar(100)
 
-  user User @relation(fields: [username], references: [username])
+  user User @relation(fields: [username], references: [username], onDelete: Cascade)
   chapters Chapter[]
 
   @@map("manga")
@@ -42,7 +42,7 @@ model Chapter{
   id Int @id @default(autoincrement())
   chapter_number Int
   chapter_title String @db.VarChar(100)
-  release_date DateTime
+  release_date DateTime @db.Date
   page_count Int
   manga_id Int
 
