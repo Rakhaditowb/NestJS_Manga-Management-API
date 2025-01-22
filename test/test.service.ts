@@ -1,6 +1,6 @@
 import { PrismaService } from '../src/common/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { User, Manga } from '@prisma/client';
+import { User, Manga, Chapter } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -56,6 +56,39 @@ export class TestService {
         status: 'test',
         release_date: new Date('2025-01-01'),
         username: 'test',
+      },
+    });
+  }
+
+  async deleteChapter() {
+    await this.prismaService.chapter.deleteMany({
+      where: {
+        manga: {
+          username: 'test',
+        },
+      },
+    });
+  }
+
+  async createChapter() {
+    const manga = await this.getManga();
+    await this.prismaService.chapter.create({
+      data: {
+        manga_id: manga.id,
+        chapter_number: '1',
+        chapter_title: 'test',
+        release_date: new Date('2025-01-01'),
+        page_count: '1',
+      },
+    });
+  }
+
+  async getChapter(): Promise<Chapter> {
+    return this.prismaService.chapter.findFirst({
+      where: {
+        manga: {
+          username: 'test',
+        },
       },
     });
   }
